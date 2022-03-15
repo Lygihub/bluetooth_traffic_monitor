@@ -1,0 +1,22 @@
+<div id="load" class="load">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Time Seen</th>
+                <th scope="col">MAC Address</th>
+                <th scope="col">Vendor</th>
+                <th scope="col">RSSI</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for device_info in devices %}
+            <tr>
+                <td>{{ device_info[0] }}</td>
+                <td>{{ device_info[1] }}</td>
+                <td>{{ device_info[2] }}</td>
+                <td>{{ device_info[3] }} dBm</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>

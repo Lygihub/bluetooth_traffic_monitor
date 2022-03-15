@@ -11,10 +11,10 @@
         <tbody>
           {% for device_info in devices %}
             <tr>
-                <td>{{ device_info[0] }}</td>
-                <td>{{ device_info[1] }}</td>
-                <td>{{ device_info[2] }}</td>
-                <td>{{ device_info[3] }} dBm</td>
+                <td>{{ device_info['time'] }}</td>
+                <td>{{ device_info['mac'] }}</td>
+                <td>{{ device_info['vendor'] }}</td>
+                <td>{{ device_info['rssi'] }} dBm</td>
             </tr>
           {% endfor %}
         </tbody>

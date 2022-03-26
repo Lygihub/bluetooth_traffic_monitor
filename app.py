@@ -13,40 +13,33 @@ bus = pydbus.SystemBus()
 SERVICE_NAME = 'org.bluez'
 mngr = bus.get(SERVICE_NAME, '/')
 
-def found_devices():
+found_devices = []
+
+def find_devices():
     DEVICE_INTERFACE = "{}.Device1".format(SERVICE_NAME)
     objs = mngr.GetManagedObjects()
     devices = []
-    for path, interfaces in objs.items():
-        if DEVICE_INTERFACE in interfaces.keys():
-            data = interfaces[DEVICE_INTERFACE]
+    global found_devices
+
+    for _, ifaces in objs.items():
+        if DEVICE_INTERFACE in ifaces.keys():
             temp = {}
-            temp['time'] = datetime.now().strftime("%H:%M:%S"),
-            if 'Address' in data:
-                temp['mac'] = data['Address']
-            # if 'ManufacturerData' in data:
-            #     for k, v in data["ManufacturerData"].items():
-            #         if k in temp.manufacturer_data:
-            #             temp.manufacturer_data[k].append(v)
-            #         else:
-            #             temp.manufacturer_data[k] = [v]
-                        
-            #     vendors = list()
-            #     for k in temp.manufacturer_data.keys():
-            #         try:
-            #             vendors.append(CompanyId(k).name)
-            #         except ValueError:
-            #             vendors.append(str(k))
-            #     if len(vendors) > 0:
-            #         vendor_str = "{}".format(", ".join(vendors))
-            #     else:
-            #         vendor_str = ""
-            #     temp.vendor = vendor_str
-            if 'RSSI' in data:
-                temp['rssi'] = data['RSSI']
-
+            temp['mac'] = ifaces[DEVICE_INTERFACE]['Address']
+            for found_device in found_devices:
+                if 'time' in found_device.keys():
+                    if temp['mac'] == found_device['mac']:
+                        temp['time'] = found_device['time']
+                else:
+                    temp['time'] = datetime.now().strftime("%H:%M:%S")
+            if 'ManufacturerData' in ifaces[DEVICE_INTERFACE]:
+                for k in ifaces[DEVICE_INTERFACE]['ManufacturerData'].keys():
+                    temp['vendor'] = CompanyId(k).name
+            else:
+                temp['vendor'] = "Unknown"
+            if 'RSSI' in ifaces[DEVICE_INTERFACE]:
+                temp['rssi'] = ifaces[DEVICE_INTERFACE]['RSSI']
             devices.append(temp)
-
+        
     return devices
 
 @app.route('/')
@@ -55,18 +48,10 @@ def index():
 
 @app.context_processor
 def inject_data():
-    # devices = found_devices()
-    with open('./found_devices.txt', 'rt') as f:
-        devices = []
-        for line in f:
-            line = line.split('/')
-            temp = {}
-            temp['time'] = line[0]
-            temp['mac'] = line[1]
-            temp['vendor'] = line[2]
-            temp['rssi'] = line[3]
-            devices.append(temp)
-    return {'devices': devices}
+    global found_devices
+    devices = find_devices()
+    found_devices = devices.copy()
+    return {'devices': found_devices}
 
 @app.before_first_request
 def before_first_request():

@@ -21,9 +21,13 @@ def find_devices():
     devices = []
     global found_devices
 
-    for _, ifaces in objs.items():
+    for path, ifaces in objs.items():
         if DEVICE_INTERFACE in ifaces.keys():
+            # print(ifaces[DEVICE_INTERFACE])
+            # print("-----------------------")
             temp = {}
+            temp['path'] = path
+            temp['alias'] = ifaces[DEVICE_INTERFACE]['Alias']
             temp['mac'] = ifaces[DEVICE_INTERFACE]['Address']
             for found_device in found_devices:
                 if 'time' in found_device.keys():
@@ -38,6 +42,25 @@ def find_devices():
                 temp['vendor'] = "Unknown"
             if 'RSSI' in ifaces[DEVICE_INTERFACE]:
                 temp['rssi'] = ifaces[DEVICE_INTERFACE]['RSSI']
+            if 'UUIDs' in ifaces[DEVICE_INTERFACE]:
+                temp['uuid'] = ""
+                for uuid in ifaces[DEVICE_INTERFACE]['UUIDs']:
+                    temp['uuid'] += uuid
+            if 'AddressType' in ifaces[DEVICE_INTERFACE]:
+                temp['address_type'] = ifaces[DEVICE_INTERFACE]['AddressType']
+            if 'Trusted' in ifaces[DEVICE_INTERFACE]:
+                temp['trusted'] = ifaces[DEVICE_INTERFACE]['Trusted']
+            if 'Blocked' in ifaces[DEVICE_INTERFACE]:
+                temp['blocked'] = ifaces[DEVICE_INTERFACE]['Blocked']
+            if 'Paired' in ifaces[DEVICE_INTERFACE]:
+                temp['paired'] = ifaces[DEVICE_INTERFACE]['Paired']
+            if 'LegacyPairing' in ifaces[DEVICE_INTERFACE]:
+                temp['legacy_pairing'] = ifaces[DEVICE_INTERFACE]['LegacyPairing']
+            if 'ServicesResolved' in ifaces[DEVICE_INTERFACE]:
+                temp['services_resolved'] = ifaces[DEVICE_INTERFACE]['ServicesResolved']
+            if 'TxPower' in ifaces[DEVICE_INTERFACE]:
+                temp['tx_power'] = ifaces[DEVICE_INTERFACE]['TxPower']
+
             devices.append(temp)
         
     return devices

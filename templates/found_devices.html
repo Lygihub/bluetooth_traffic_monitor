@@ -2,7 +2,9 @@
     <table class="table table-dark">
         <thead>
             <tr>
+                <th></th>
                 <th scope="col">Time Seen</th>
+                <th scope="col">Alias</th>
                 <th scope="col">MAC Address</th>
                 <th scope="col">Vendor</th>
                 <th scope="col">RSSI</th>
@@ -11,7 +13,22 @@
         <tbody>
           {% for device_info in devices %}
             <tr>
+                <td id="td-{{ device_info['mac'] }}" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown-{{ device_info['mac'] }}" data-bs-toggle="dropdown" aria-expanded="false">...</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-{{ device_info['mac'] }}">
+                    <li class="dropdown-item">UUIDs: {{ device_info['uuid'] }}</li>
+                    <li class="dropdown-item">Address Type: {{ device_info['address_type'] }}</li>
+                    <li class="dropdown-item">Trusted: {{ device_info['trusted'] }}</li>
+                    <li class="dropdown-item">Blocked: {{ device_info['blocked'] }}</li>
+                    <li class="dropdown-item">Paired: {{ device_info['paired'] }}</li>
+                    <li class="dropdown-item">Legacy Pairing: {{ device_info['legacy_pairing'] }}</li>
+                    <li class="dropdown-item">Services Resolved: {{ device_info['services_resolved'] }}</li>
+                    <li class="dropdown-item">Tx Power: {{ device_info['tx_power'] }}</li>
+
+                    </ul>
+                </td>
                 <td>{{ device_info['time'] }}</td>
+                <td>{{ device_info['alias'] }}</td>
                 <td>{{ device_info['mac'] }}</td>
                 <td>{{ device_info['vendor'] }}</td>
                 <td>{{ device_info['rssi'] }} dBm</td>

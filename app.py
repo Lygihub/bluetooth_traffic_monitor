@@ -43,9 +43,9 @@ def find_devices():
             if 'RSSI' in ifaces[DEVICE_INTERFACE]:
                 temp['rssi'] = ifaces[DEVICE_INTERFACE]['RSSI']
             if 'UUIDs' in ifaces[DEVICE_INTERFACE]:
-                temp['uuid'] = ""
+                temp['uuid'] = []
                 for uuid in ifaces[DEVICE_INTERFACE]['UUIDs']:
-                    temp['uuid'] += uuid
+                    temp['uuid'].append(uuid)
             if 'AddressType' in ifaces[DEVICE_INTERFACE]:
                 temp['address_type'] = ifaces[DEVICE_INTERFACE]['AddressType']
             if 'Trusted' in ifaces[DEVICE_INTERFACE]:

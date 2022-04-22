@@ -16,7 +16,21 @@
                 <td id="td-{{ device_info['mac'] }}" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown-{{ device_info['mac'] }}" data-bs-toggle="dropdown" aria-expanded="false">...</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdown-{{ device_info['mac'] }}">
-                    <li class="dropdown-item">UUIDs: {{ device_info['uuid'] }}</li>
+                  {% for uuid in device_info['uuid'] %}
+                    {% if loop.index == 1 %}
+                      {% if loop.index == loop.length %}
+                        <li class="dropdown-item">UUIDs: {{ uuid }}</li>
+                      {% else %}
+                        <li class="dropdown-item">UUIDs: {{ uuid }},</li>
+                      {% endif %} 
+                    {% else %}
+                      {% if loop.index == loop.length %}
+                      <li class="dropdown-item">{{ uuid }}</li>
+                      {% else %}
+                      <li class="dropdown-item">{{ uuid }},</li>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
                     <li class="dropdown-item">Address Type: {{ device_info['address_type'] }}</li>
                     <li class="dropdown-item">Trusted: {{ device_info['trusted'] }}</li>
                     <li class="dropdown-item">Blocked: {{ device_info['blocked'] }}</li>

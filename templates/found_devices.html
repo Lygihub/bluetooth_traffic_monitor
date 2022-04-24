@@ -46,6 +46,12 @@
                 <td>{{ device_info['mac'] }}</td>
                 <td>{{ device_info['vendor'] }}</td>
                 <td>{{ device_info['rssi'] }} dBm</td>
+                <td>
+                    <form action="/connect" method="post">
+                        <input type="hidden" name="path" value="{{ device_info['path'] }}">
+                        <button type="submit">Connect</button>
+                    </form>
+                </td>
             </tr>
           {% endfor %}
         </tbody>

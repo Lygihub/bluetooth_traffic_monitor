@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from turbo_flask import Turbo
 import pydbus
 from src.hci_constants import CompanyId
@@ -81,9 +81,15 @@ def before_first_request():
     def update_found_device():
         with app.app_context():
             while True:
-                time.sleep(1)
+                time.sleep(5)
                 turbo.push(turbo.replace(render_template('found_devices.html'), 'load'))
     threading.Thread(target=update_found_device).start()
+
+@app.route('/connect', methods=['GET', 'POST'])
+def connect():
+    proxy = bus.get(SERVICE_NAME, request.form['path'])
+    proxy.Connect()
+    return("Connected")
 
 if __name__ == "__main__":
     app.run(debug=True)
